@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Summarization Website</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css?v=1.0" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(to right, #d3d3d3, #ffffff);
+            color: #000000;
+            font-family: 'Arial', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            background-color: #001f3f;
+        }
+
+        .navbar-brand {
+            color: #ffffff;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+
+        .container {
+            max-width: 960px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-title {
+            background-color: rgba(192, 192, 192, 0.8);
+            color: #000000;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .form-control {
+            border-radius: 20px;
+        }
+
+        .btn-primary {
+            background-color: #001f3f;
+            border: none;
+            border-radius: 20px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #6A5ACD;
+        }
+
+        .lavender-box {
+            background: rgba(192, 192, 192, 0.9);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            color: #000000;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .custom-bg {
+            background: rgba(192, 192, 192, 0.9);
+            border-radius: 10px;
+            padding: 20px;
+            color: #000000;
+            text-align: center;
+            font-size: 1.25rem;
+        }
+
+        #summaryOutput {
+            height: 300px;
+            background: #c0c0c0;
+            border-radius: 10px;
+            padding: 15px;
+            color: #000000;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+        }
+
+        footer {
+            background-color: #001f3f;
+            color: #ffffff;
+            text-align: center;
+            padding: 10px;
+            margin-top: 30px;
+            border-radius: 5px;
+        }
+
+        .arrow {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #001f3f;
+            color: #ffffff;
+            padding: 15px;
+            border-radius: 50%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .arrow:hover {
+            background-color: #6A5ACD;
+        }
+
+        .side-decoration {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            width: 80px;
+            background: linear-gradient(to bottom, #001f3f, #6A5ACD);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 0;
+        }
+
+        .side-decoration.left {
+            left: 0;
+        }
+
+        .side-decoration.right {
+            right: 0;
+        }
+
+        .side-decoration .pattern {
+            margin: 20px auto;
+            width: 40px;
+            height: 40px;
+            background: #ffffff;
+            border-radius: 50%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="side-decoration left">
+        <div class="pattern"></div>
+        <div class="pattern"></div>
+        <div class="pattern"></div>
+    </div>
+
+    <div class="side-decoration right">
+        <div class="pattern"></div>
+        <div class="pattern"></div>
+        <div class="pattern"></div>
+    </div>
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Summarization Website</a>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <!-- Text Summarization -->
+        <div class="section-title">Text Summarization</div>
+        <form method="post" action="/text-summarization" class="mt-4">
+            <div class="form-group">
+                <textarea class="form-control" name="inputtext_" placeholder="Enter text here..." style="overflow: auto; resize: none; min-height: 150px;" required></textarea>
+            </div>
+            <div class="form-group mt-3">
+                <label for="summaryLength" class="form-label">Summary Length:</label>
+                <select class="form-control" name="summary_length">
+                    <option value="short">Short</option>
+                    <option value="medium" selected>Medium</option>
+                    <option value="long">Long</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3 w-100">Summarize</button>
+        </form>
+
+        <!-- URL Summarization -->
+        <div class="section-title mt-5">URL Summarization</div>
+        <form method="post" action="/url-summarization" class="mt-4">
+            <div class="form-group">
+                <input type="text" class="form-control" name="url" placeholder="Enter URL here..." required>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3 w-100">Summarize</button>
+        </form>
+
+        <!-- Audio Summarization -->
+        <div class="section-title mt-5">Audio Summarization</div>
+        <div class="lavender-box">
+            <h5>Upload Audio File</h5>
+            <form method="post" action="/audio-summarization" enctype="multipart/form-data">
+                <input type="file" name="audio_file" class="form-control" accept="audio/*" required>
+                <button type="submit" class="btn btn-primary mt-3 w-100">Upload & Summarize</button>
+            </form>
+        </div>
+
+        <!-- Image Summarization -->
+        <div class="section-title mt-5">Image Summarization</div>
+        <form method="post" action="/image-summarization" enctype="multipart/form-data" class="mt-4">
+            <div class="form-group">
+                <input type="file" class="form-control" name="image_file" accept="image/*" required>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3 w-100">Summarize</button>
+        </form>
+
+        <!-- Chart Summarization -->
+        <div class="section-title mt-5">Chart Summarization</div>
+        <form method="post" action="/chart-summarization" enctype="multipart/form-data" class="mt-4">
+            <div class="form-group">
+                <input type="file" class="form-control" name="chart_file" accept="image/*" required>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3 w-100">Summarize</button>
+        </form>
+
+        <!-- Text File Summarization -->
+        <div class="section-title mt-5">Text File Summarization</div>
+        <div class="lavender-box">
+            <h5>Upload Text File (PDF, PPT, DOC, etc.)</h5>
+            <form method="post" action="/text-file-summarization" enctype="multipart/form-data">
+                <input type="file" name="text_file" class="form-control" accept=".pdf,.ppt,.doc,.docx" required>
+                <button type="submit" class="btn btn-primary mt-3 w-100">Upload & Summarize</button>
+            </form>
+        </div>
+
+        <!-- Summary Output -->
+        <div class="section-title mt-5">Summary Output</div>
+        <div class="lavender-box">
+            <div id="summaryOutput">
+                {% if summary %}
+                    <h4>Summary:</h4>
+                    <p>{{ summary|safe }}</p>
+                {% else %}
+                    <p>No summary available. Please provide input to summarize.</p>
+                {% endif %}
+            </div>
+            {% if summary %}
+                <form action="/download-summary" method="post" class="mt-3">
+                    <input type="hidden" name="summary_content" value="{{ summary }}">
+                    <button type="submit" class="btn btn-secondary w-100">Download Summary</button>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Summarization Website. All rights reserved.</p>
+    </footer>
+
+    <div class="arrow" id="scrollToTop" onclick="scrollToTop()">&#9650;</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.querySelector('form[action="/text-summarization"]').onsubmit = function (e) {
+            e.preventDefault();
+            this.submit();
+            setTimeout(() => document.getElementById('summaryOutput').scrollIntoView({ behavior: 'smooth' }), 1000);
+        };
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+
+</html>
