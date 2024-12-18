@@ -1,0 +1,10 @@
+Flask
+transformers
+whisper
+pytesseract
+pydub
+requests
+bs4
+opencv-python
+numpy
+Pillow
